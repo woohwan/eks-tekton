@@ -5,7 +5,8 @@ metadata:
 spec:
   resources:
     requests:
-      storage: 200Mi
-  volumeMode: Filesystem
+      storage: 1Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
+  volumeMode: Filesystem
+  storageClassName: eks-efs-storage-class

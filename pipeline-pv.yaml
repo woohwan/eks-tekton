@@ -1,0 +1,14 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pipeline-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: eks-efs-storage-class
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-0ad1330bc2e54c1ef

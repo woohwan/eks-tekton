@@ -6,8 +6,8 @@ metadata:
 spec:
   serviceAccountName: build-bot
   pipelineRef:
-    name: tekton-buildah-express-pipeline-74rk8
+    name: tekton-buildah-express-pipeline
   workspaces:
     - name: pipeline-shared-data
-      persistentVolumeClaim: # Affinity Assistant
+      persistentVolumeClaim:
         claimName: pipeline-pvc

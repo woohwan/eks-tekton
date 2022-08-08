@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  generateName: tekton-buildah-express-pipeline-
+  name: tekton-buildah-express-pipeline
 spec:
   workspaces:
     - name: pipeline-shared-data
@@ -38,18 +38,18 @@ spec:
       runAfter:
         - clone-repository
 
-    - name: run-tests
-      taskRef:
-        name: npm
-      workspaces:
-        - name: source
-          workspace: pipeline-shared-data
-      params:
-        - name: ARGS
-          value:
-            - test
-      runAfter:
-        - install-dependencies
+    # - name: run-tests
+    #   taskRef:
+    #     name: npm
+    #   workspaces:
+    #     - name: source
+    #       workspace: pipeline-shared-data
+    #   params:
+    #     - name: ARGS
+    #       value:
+    #         - run test
+    #   runAfter:
+    #     - install-dependencies
     - name: build-image
       params:
         - name: IMAGE
@@ -61,5 +61,5 @@ spec:
         - name: 
           workspace: source
           workspace: pipeline-shared-data
-      runAfter:
-        - run-tests
+      # runAfter:
+      #   - run-tests
