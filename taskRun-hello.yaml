@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: hello
+spec:
+  params:
+    - name: whatyousay
+      value: hellllo
+  taskRef:
+    name: hello

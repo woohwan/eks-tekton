@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: hello-goodbye
+spec:
+  params:
+    - name: whatyousay
+      type: string
+      description: ddd
+      default: byebye
+  tasks:
+    - name: hello
+      taskRef:
+        name: hello
+      params:
+        - name: whatyousay
+          value: "$(params.whatyousay)"
+    - name: goodbye
+      runAfter:
+        - hello
+      taskRef:
+        name: goodbye

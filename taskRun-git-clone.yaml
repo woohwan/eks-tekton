@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: git-clone-
+spec:
+  params:
+    - name: url
+      value: "https://github.com/woohwan/tekton-buildah-express"
+    - revision:
+      value: "main"
+  taskRef:
+    name: git-clone
+  workspaces:
+    - name: output
+      emptyDir: {}

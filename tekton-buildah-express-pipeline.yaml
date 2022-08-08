@@ -1,0 +1,65 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  generateName: tekton-buildah-express-pipeline-
+spec:
+  workspaces:
+    - name: pipeline-shared-data
+      description: |
+        This workspace will be shared throughout all steps
+  params:
+    - name: image-repo
+      type: string
+      description: Docker image name
+      default: whpark70/tekton-buildah-express
+  tasks:
+    - name: clone-repository
+      params:
+        - name: url
+          value: https://github.com/woohwan/tekton-buildah-express
+        - name: revision
+          value: "main"
+      taskRef:
+        kind: Task
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: pipeline-shared-data
+    - name: install-dependencies
+      taskRef:
+        name: npm
+      workspaces:
+        - name: source
+          workspace: pipeline-shared-data
+      params:
+        - name: ARGS
+          value:
+            - clean-install
+      runAfter:
+        - clone-repository
+
+    - name: run-tests
+      taskRef:
+        name: npm
+      workspaces:
+        - name: source
+          workspace: pipeline-shared-data
+      params:
+        - name: ARGS
+          value:
+            - test
+      runAfter:
+        - install-dependencies
+    - name: build-image
+      params:
+        - name: IMAGE
+          value: "$(params.image-repo):$(tasks.clone-repository.results.commit)"
+      taskRef:
+        kind: Task
+        name: buildah
+      workspaces:
+        - name: 
+          workspace: source
+          workspace: pipeline-shared-data
+      runAfter:
+        - run-tests
