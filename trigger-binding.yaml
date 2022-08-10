@@ -1,0 +1,10 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: triggerbinding
+spec:
+  params:
+    - name: giturl
+      value: $(body.repository.git_url)
+    - name: gitrevision
+      value: $(body.repository.default_branch)

@@ -12,13 +12,18 @@ spec:
       type: string
       description: Docker image name
       default: whpark70/tekton-buildah-express
+    - name: git-url
+      type: string
+    - name: git-revision
+      type: string
+      default: main
   tasks:
     - name: clone-repository
       params:
         - name: url
-          value: https://github.com/woohwan/tekton-buildah-express
+          value: "$(params.git-url)"
         - name: revision
-          value: "main"
+          value: "$(params.git-revision)"
       taskRef:
         kind: Task
         name: git-clone
@@ -38,18 +43,19 @@ spec:
       runAfter:
         - clone-repository
 
-    # - name: run-tests
-    #   taskRef:
-    #     name: npm
-    #   workspaces:
-    #     - name: source
-    #       workspace: pipeline-shared-data
-    #   params:
-    #     - name: ARGS
-    #       value:
-    #         - run test
-    #   runAfter:
-    #     - install-dependencies
+    - name: run-tests
+      taskRef:
+        name: npm
+      workspaces:
+        - name: source
+          workspace: pipeline-shared-data
+      params:
+        - name: ARGS
+          value:
+            - test
+      runAfter:
+        - install-dependencies
+
     - name: build-image
       params:
         - name: IMAGE
@@ -58,8 +64,7 @@ spec:
         kind: Task
         name: buildah
       workspaces:
-        - name: 
-          workspace: source
+        - name: source
           workspace: pipeline-shared-data
-      # runAfter:
-      #   - run-tests
+      runAfter:
+        - run-tests
