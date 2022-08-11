@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: tekton-buildah-express-pipeline-run-
+  namespace: default
+spec:
+  serviceAccountName: build-bot
+  pipelineRef:
+    name: tekton-buildah-express-pipeline
+  params:
+    - name: git-url
+      value: https://github.com/woohwan/tekton-buildah-express.git
+  workspaces:
+    - name: pipeline-shared-data
+      persistentVolumeClaim:
+        claimName: efs-claim

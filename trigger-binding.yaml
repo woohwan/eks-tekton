@@ -5,6 +5,6 @@ metadata:
 spec:
   params:
     - name: giturl
-      value: $(body.repository.git_url)
+      value: $(body.repository.clone_url)
     - name: gitrevision
       value: $(body.repository.default_branch)
